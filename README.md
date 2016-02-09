@@ -48,7 +48,7 @@ Play provides an executable binary for linux and windows.
 ### Prerequisites
 One need to run a [ArangoDB](https://www.arangodb.com/) on any reachable host.
 ### Starting
-`bin/play-pass [params]`
+Just start the the latest [binary](https://github.com/ldaume/play-pass/releases) via `bin/play-pass [params]`
 ### Parameter
 #### Play
 All available play parameter are valid.
