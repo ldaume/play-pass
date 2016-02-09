@@ -26,7 +26,7 @@ play-pass-arango:
     - /path/to/host/dir:/var/lib/arangodb
   restart: always
  play-pass:
-  image: quay.io/ldaume/play-pass:latest
+  image: ldaume/play-pass:latest
   container_name: play-pass
   links:
     - play-pass-arango
