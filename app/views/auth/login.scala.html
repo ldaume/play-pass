@@ -1,0 +1,40 @@
+@import persistence.entity.AuthorisedUser
+@(form: Form[AuthorisedUser])
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>RE:invent Passwords</title>
+        <link rel="icon" href="@routes.Assets.at("images/favicon.ico")">
+        <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap.min.css"))'>
+        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.min.js"))'></script>
+        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap.min.js"))'></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-header">
+                <h1>Sign in</h1>
+            </div>
+            @helper.form(routes.Authenticate.authenticate, 'class -> "form-horizontal") {
+                @if(form.hasGlobalErrors) {
+                    <div class="alert alert-danger fade in">
+                    @form.globalError.message
+                    </div>
+                }
+                @for(error <- form("email").errors) {
+                    <div class="alert alert-danger fade in">@error.message</div>
+                }
+                <p>
+                    <input type="email" name="email" value="@form("email").value" class="form-control" placeholder="Email address" required autofocus>
+                </p>
+                @for(error <- form("password").errors) {
+                    <div class="alert alert-danger fade in">@error.message</div>
+                }
+                <p>
+                    <input type="password" name="password" class="form-control" placeholder="Password" required>
+                </p>
+                <p>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Authenticate</button>
+                </p></div>
+    </body>
+</html>
+}

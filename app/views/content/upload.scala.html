@@ -1,0 +1,22 @@
+@import play.data.DynamicForm
+@(form: DynamicForm)
+@main("REInvent Passwords - Import") {
+    <div class="container">
+        <div class="page-header">
+            <h2>File Upload</h2>
+        </div>
+        @helper.form(routes.Upload.doUpload(), 'class -> "form-horizontal", 'enctype -> "multipart/form-data") {
+            @if(form.hasGlobalErrors) {
+                <div class="alert alert-danger fade in">
+                @form.globalError.message
+                </div>
+            }
+            <label for="exampleInputFile">Keypass CSV import</label>
+            <input type="file" name="csv" class="btn btn-default"/>
+            <p class="help-block">Please choose Keypass CSV (1.x) file.</p>
+            <p>
+                <button type="submit" class="btn btn-success">Import</button>
+            </p>
+        }
+    </div>
+}
