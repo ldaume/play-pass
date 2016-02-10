@@ -1,6 +1,6 @@
 name := """play-pass"""
 
-version := "0.1.0-SNAPSHOT"
+version := "1.0.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava, JavaAppPackaging, DockerPlugin)
 
@@ -19,7 +19,8 @@ libraryDependencies ++= Seq(
   //"org.webjars" % "bootstrap" % "4.0.0-alpha.2",
   "org.webjars" % "bootstrap" % "3.3.6",
   "org.webjars" % "webjars-play_2.11" % "2.4.0-2",
-  "org.webjars" % "jquery" % "3.0.0-alpha1",
+  //"org.webjars" % "jquery" % "3.0.0-alpha1",
+  "org.webjars" % "jquery" % "2.2.0",
   "org.webjars" % "font-awesome" % "4.5.0",
   //"org.webjars" % "requirejs" % "2.1.20",
   //"org.webjars" % "backbonejs" % "1.2.1",
