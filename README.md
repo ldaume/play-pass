@@ -5,6 +5,9 @@ All passwords are rendered with [DataTables](https://www.datatables.net/) to pro
 
 ![Screenshot](https://s3-eu-west-1.amazonaws.com/ldaume-public/play_pass/REInvent_Passwords_screen.png "Example Screenshot")
 
+## Roadmap
+Check the [Roadmap](https://github.com/ldaume/play-pass/blob/master/CHANGELOG.md) to see changes made in the past and specific plans for upcoming releases.
+
 # Imports
 ## KeePass
 The CSV exports from [KeePass](http://keepass.info/) can be imported into this app.
