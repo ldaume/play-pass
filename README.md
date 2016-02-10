@@ -3,7 +3,7 @@ Play-Pass is a very simple web based password manager which uses [Play](https://
 
 All passwords are rendered with [DataTables](https://www.datatables.net/) to provide great pagination, instant search and multi-column ordering.
 
-![Example Screenshot](https://s3-eu-west-1.amazonaws.com/ldaume-public/play_pass/REInvent_Passwords.png "Example Screenshot")
+![Screenshot](https://s3-eu-west-1.amazonaws.com/ldaume-public/play_pass/REInvent_Passwords_screen.png "Example Screenshot")
 
 # Imports
 ## KeePass
