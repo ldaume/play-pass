@@ -1,6 +1,7 @@
 package controllers;
 
 import be.objectify.deadbolt.java.actions.SubjectPresent;
+import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.net.MediaType;
 import com.google.inject.Inject;
@@ -41,7 +42,7 @@ public class Upload extends Controller {
                                                                 MediaType.MICROSOFT_EXCEL,
                                                                 MediaType.OPENDOCUMENT_SPREADSHEET,
                                                                 MediaType.OOXML_SHEET);
-        if ( !allowedTypes.contains(mediaType) ) {
+        if ( !allowedTypes.contains(mediaType) || !allowedTypes.contains(mediaType.withCharset(Charsets.UTF_8)) ) {
           uploadForm.reject("Only the types "
                             + allowedTypes
                             + " are allowed.\nBut {"
