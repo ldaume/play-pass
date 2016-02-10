@@ -42,7 +42,7 @@ public class Upload extends Controller {
                                                                 MediaType.MICROSOFT_EXCEL,
                                                                 MediaType.OPENDOCUMENT_SPREADSHEET,
                                                                 MediaType.OOXML_SHEET);
-        if ( !allowedTypes.contains(mediaType) || !allowedTypes.contains(mediaType.withCharset(Charsets.UTF_8)) ) {
+        if ( !allowedTypes.contains(mediaType) && !allowedTypes.contains(mediaType.withCharset(Charsets.UTF_8)) ) {
           uploadForm.reject("Only the types "
                             + allowedTypes
                             + " are allowed.\nBut {"
