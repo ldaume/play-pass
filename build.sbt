@@ -76,7 +76,7 @@ initialize := {
 // --------------------
 // build with activator docker:publishLocal
 
-dockerBaseImage := "iron/java:1.8-dev"
+dockerBaseImage := "iron/java:1.8"
 
 // setting a maintainer which is used for findAll packaging types</pre>
 maintainer := "Leonard Daume"
