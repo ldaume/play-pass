@@ -7,4 +7,4 @@ v1.0.0 (2016-0X-XX)
 v0.0.1-SNAPSHOT (2016-02-09)
 ------------------------
 
-First runable release of Play-Pass
+First runnable release of Play-Pass
