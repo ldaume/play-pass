@@ -6,6 +6,9 @@ import com.arangodb.DocumentCursor;
 import com.arangodb.entity.DocumentEntity;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
+import de.qaware.heimdall.Password;
+import de.qaware.heimdall.PasswordException;
+import de.qaware.heimdall.PasswordFactory;
 import persistence.dao.generic.GenericDAOImpl;
 import persistence.db.ArangoDB;
 import persistence.entity.AuthorisedUser;
@@ -42,6 +45,12 @@ public class UserDao extends GenericDAOImpl<AuthorisedUser> implements IUserDao 
   }
 
   @Override public Optional<Subject> findByEmailAndPassword(final String email, final String password) {
+    final Password passwordFactory = PasswordFactory.create();
+    try {
+      final String hash = passwordFactory.hash(password.toCharArray());
+    } catch (PasswordException e) {
+      e.printStackTrace();
+    }
     String query = "FOR u IN "
                    + ArangoDB.AUTHORIZED_USERS_COLLECTION
                    + " FILTER u.email == @email AND u.password == @password"

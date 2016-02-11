@@ -13,6 +13,9 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import de.qaware.heimdall.Password;
+import de.qaware.heimdall.PasswordException;
+import de.qaware.heimdall.PasswordFactory;
 import org.apache.commons.lang3.StringUtils;
 import persistence.entity.AuthorisedUser;
 import play.Logger;
@@ -140,6 +143,12 @@ public class ArangoDB {
                                                                                    .constructCollectionType(List.class,
                                                                                                             AuthorisedUser.class));
             allDefaultUsers.forEach(authorisedUser -> {
+              try {
+                final Password password = PasswordFactory.create();
+                authorisedUser.setPassword(password.hash(authorisedUser.getPassword().toCharArray()));
+              } catch (PasswordException e) {
+                throw new RuntimeException(e);
+              }
               final JsonNode jsonNode = Json.toJson(authorisedUser);
               final String query = "UPSERT { email: \""
                                    + authorisedUser.getEmail()

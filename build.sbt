@@ -10,6 +10,7 @@ scalaVersion := "2.11.7"
 
 //resolvers += Resolver.mavenLocal
 resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
+resolvers += Resolver.jcenterRepo
 
 libraryDependencies ++= Seq(
   cache,
@@ -30,6 +31,7 @@ libraryDependencies ++= Seq(
 
   // Security
   "be.objectify" %% "deadbolt-java" % "2.4.4",
+  "de.qaware" % "heimdall" % "1.3",
 
   // Commons
   "org.apache.commons" % "commons-lang3" % "3.4",

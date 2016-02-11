@@ -2,6 +2,8 @@ package controllers;
 
 import be.objectify.deadbolt.core.models.Subject;
 import com.google.inject.Inject;
+import de.qaware.heimdall.Password;
+import de.qaware.heimdall.PasswordFactory;
 import persistence.dao.UserDao;
 import persistence.entity.AuthorisedUser;
 import play.data.Form;
@@ -24,12 +26,23 @@ public class Authenticate extends Controller {
         return badRequest(login.render(loginForm));
       }
 
-      final Optional<Subject> byEmail = userDao.findByEmailAndPassword(loginForm.get().getEmail(),
-                                                                       loginForm.get().getPassword());
+      final String formPassword = loginForm.get().getPassword();
+      final Optional<Subject> byEmail = userDao.findByEmail(loginForm.get().getEmail());
       if ( byEmail.isPresent() ) {
-        session().clear();
-        session("email", loginForm.get().email);
-        return redirect(routes.Passwords.index());
+        final AuthorisedUser authorisedUser = (AuthorisedUser) byEmail.get();
+        final Password password = PasswordFactory.create();
+        if ( password.verify(formPassword.toCharArray(), authorisedUser.getPassword()) ) {
+          // Check if the hash uses an old hash
+          if ( password.needsRehash(authorisedUser.getPassword()) ) {
+            // algorithm, insecure parameters, etc.
+            String newHash = password.hash(formPassword.toCharArray());
+            authorisedUser.setPassword(newHash);
+            userDao.upsert(authorisedUser);
+          }
+          session().clear();
+          session("email", loginForm.get().email);
+          return redirect(routes.Passwords.index());
+        }
       }
       loginForm.reject("No user found");
       return badRequest(login.render(loginForm));
