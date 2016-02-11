@@ -1,3 +1,4 @@
+import com.typesafe.sbt.packager.docker._
 name := """play-pass"""
 
 version := "1.0.0-SNAPSHOT"
@@ -79,7 +80,11 @@ initialize := {
 // --------------------
 // build with activator docker:publishLocal
 
-dockerBaseImage := "iron/java:1.8"
+dockerBaseImage := "frolvlad/alpine-oraclejdk8:latest"
+dockerCommands := dockerCommands.value.flatMap {
+  case cmd@Cmd("FROM", _) => List(cmd, Cmd("RUN", "apk update && apk add bash"))
+  case other => List(other)
+}
 
 // setting a maintainer which is used for findAll packaging types</pre>
 maintainer := "Leonard Daume"
