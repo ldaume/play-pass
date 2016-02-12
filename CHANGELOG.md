@@ -1,4 +1,4 @@
-v1.0.0 (2016-0X-XX)
+v1.0.0 (2016-02-XX)
 -------------------
  
 * Export options include copy to clipboard, CSV, Excel (XSLX) and PDF files ✓
