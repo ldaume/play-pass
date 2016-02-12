@@ -37,7 +37,7 @@ public class Authenticate extends Controller {
             // algorithm, insecure parameters, etc.
             String newHash = password.hash(formPassword.toCharArray());
             authorisedUser.setPassword(newHash);
-            userDao.upsert(authorisedUser);
+            userDao.upsert("email", authorisedUser.getEmail(), authorisedUser, authorisedUser);
           }
           session().clear();
           session("email", loginForm.get().email);

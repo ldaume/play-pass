@@ -1,5 +1,8 @@
 package persistence.entity;
 
+import org.hibernate.validator.constraints.URL;
+import play.data.validation.Constraints;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -10,13 +13,19 @@ public class Password {
   //"Account"
   public String account;
   // "Authenticate Name"
+  @Constraints.Required
   public String login;
   // "Password"
+  @Constraints.Required
   public String password;
   // "Web Site"
+  @URL
   public String webSite;
   // "Comments"
   public String comments;
+
+  public Password() {
+  }
 
   public Password(final String account,
                   final String login,
