@@ -3,7 +3,7 @@
  */
 $(document).ready(function () {
     var table = $('#passwordTable').DataTable({
-        "ajax": "/play-pass/data/pws",
+        "ajax": "/play-pass/password/data/pws",
         "columns": [
             {"data": "account"},
             {"data": "login"},

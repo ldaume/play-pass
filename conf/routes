@@ -2,24 +2,20 @@
 # This file defines findAll application routes (Higher priority routes first)
 # ~~~~
 
-
-
-# All passwords
-GET         /play-pass                       @controllers.Passwords.index()
-GET         /play-pass/data/pws              @controllers.Passwords.data()
-
 #login
-GET         /play-pass/login                 @controllers.Authenticate.login()
-POST        /play-pass/authenticate          @controllers.Authenticate.authenticate()
-GET         /play-pass/logout                @controllers.Authenticate.logout()
+GET         /play-pass/login                    @controllers.Authenticate.login()
+POST        /play-pass/authenticate             @controllers.Authenticate.authenticate()
+GET         /play-pass/logout                   @controllers.Authenticate.logout()
 
 # CRUD Passwords
-GET         /play-pass/upload                @controllers.Upload.index()
-POST        /play-pass/doUpload              @controllers.Upload.doUpload()
-GET         /play-pass/password/add          @controllers.AddPassword.index()
-POST        /play-pass/password/doAdd        @controllers.AddPassword.add()
+GET         /play-pass/password                 @controllers.Passwords.index()
+GET         /play-pass/password/data/pws        @controllers.Passwords.data()
+GET         /play-pass/password/upload          @controllers.Upload.index()
+POST        /play-pass/password/doUpload        @controllers.Upload.doUpload()
+GET         /play-pass/password/add             @controllers.AddPassword.index()
+POST        /play-pass/password/doAdd           @controllers.AddPassword.add()
 
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                    @controllers.Assets.at(path="/public", file)
-GET         /webjars/*file                   @controllers.WebJarAssets.at(file)
+GET         /play-pass/assets/*file             @controllers.Assets.at(path="/public", file)
+GET         /play-pass/webjars/*file            @controllers.WebJarAssets.at(file)
