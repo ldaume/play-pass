@@ -2,6 +2,11 @@
 # This file defines findAll application routes (Higher priority routes first)
 # ~~~~
 
+# rerouting
+GET         /                                   @controllers.Application.index()
+GET         /play-pass                          @controllers.Application.index()
+GET         /play-pass/                         @controllers.Application.index()
+
 #login
 GET         /play-pass/login                    @controllers.Authenticate.login()
 POST        /play-pass/authenticate             @controllers.Authenticate.authenticate()
