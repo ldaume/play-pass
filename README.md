@@ -15,7 +15,7 @@ The CSV exports from [KeePass](http://keepass.info/) can be imported into this a
 # Usage
 The App is available @ `http[s]://<host>/play-pass`.
 ## Docker
-The App and all dependencies are available with [docker](https://hub.docker.com/r/ldaume/play-pass/).
+The App and all dependencies are available with [docker](https://hub.docker.com/r/ldaume/play-pass/) [![](https://badge.imagelayers.io/ldaume/play-pass:latest.svg)](https://imagelayers.io/?images=ldaume/play-pass:latest 'Get your own badge on imagelayers.io').
 ### Starting via Docker Compose
 The easiest way to run the App is via [Docker Compose](https://docs.docker.com/compose/)
 #### Compose File
