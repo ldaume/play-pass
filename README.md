@@ -67,3 +67,4 @@ All available play parameter are valid.
 | `-Darango.username` | the db username | string |  root |
 | `-Darango.password` | the user's password | string |  pw |
 | `-Dauthorised.users` | the default users for the app | json-array |  `[{email:'test@example.com',password:'test'}]` |
+| `-Dsession.timeout` | The session timeout in minutes | integer | 30 |

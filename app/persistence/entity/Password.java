@@ -1,5 +1,6 @@
 package persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.URL;
 import play.data.validation.Constraints;
 
@@ -9,19 +10,12 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 /**
  * Created by Leonard Daume on 22.11.2015.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Password {
-  //"Account"
   public String account;
-  // "Authenticate Name"
-  @Constraints.Required
-  public String login;
-  // "Password"
-  @Constraints.Required
-  public String password;
-  // "Web Site"
-  @URL
-  public String webSite;
-  // "Comments"
+  @Constraints.Required public String login;
+  @Constraints.Required public String password;
+  @URL public String webSite;
   public String comments;
 
   public Password() {

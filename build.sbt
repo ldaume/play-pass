@@ -1,4 +1,5 @@
 import com.typesafe.sbt.packager.docker._
+
 name := """play-pass"""
 
 version := "1.0.0-SNAPSHOT"
@@ -9,9 +10,9 @@ javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 
 scalaVersion := "2.11.7"
 
-//resolvers += Resolver.mavenLocal
 resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
 resolvers += Resolver.jcenterRepo
+resolvers += Resolver.mavenLocal
 
 libraryDependencies ++= Seq(
   cache,
@@ -47,6 +48,9 @@ libraryDependencies ++= Seq(
   // Json
   "com.jayway.jsonpath" % "json-path" % "2.1.0",
   "io.mola.galimatias" % "galimatias" % "0.2.1",
+
+  // CSV
+  "com.fasterxml.jackson.dataformat" % "jackson-dataformat-csv" % "2.7.1",
 
   // Testing
   "org.assertj" % "assertj-core" % "3.1.0" % "test",

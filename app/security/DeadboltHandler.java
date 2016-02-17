@@ -19,18 +19,16 @@ import be.objectify.deadbolt.core.models.Subject;
 import be.objectify.deadbolt.java.AbstractDeadboltHandler;
 import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
-import persistence.dao.UserDao;
 import play.cache.CacheApi;
 import play.libs.F;
 import play.mvc.Http;
 import play.mvc.Result;
 
-import java.time.Duration;
 import java.util.Optional;
 
 public class DeadboltHandler extends AbstractDeadboltHandler {
-  @Inject UserDao userDao;
-  @Inject CacheApi cacheApi;
+
+  @Inject private CacheApi cacheApi;
 
   public F.Promise<Optional<Result>> beforeAuthCheck(final Http.Context context) {
     return F.Promise.promise(Optional::empty);
@@ -38,13 +36,16 @@ public class DeadboltHandler extends AbstractDeadboltHandler {
 
   public F.Promise<Optional<Subject>> getSubject(final Http.Context context) {
     return F.Promise.promise(() -> {
-      final String email = context.session().get("email");
-      if ( StringUtils.isBlank(email) || userDao == null ) {
+      final Http.Session session = context.session();
+      final String id = session.get("id");
+      if ( StringUtils.isBlank(id) ) {
         return Optional.empty();
       }
-      return cacheApi.getOrElse("user." + email,
-                                () -> userDao.findByEmail(email),
-                                Long.valueOf(Duration.ofMinutes(15).getSeconds()).intValue());
+      final Optional<Subject> subject = Optional.ofNullable(cacheApi.get(id));
+      if ( !subject.isPresent() ) {
+        session.clear();
+      }
+      return subject;
     });
   }
 

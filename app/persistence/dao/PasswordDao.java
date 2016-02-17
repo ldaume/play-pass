@@ -1,6 +1,9 @@
 package persistence.dao;
 
 import com.arangodb.ArangoException;
+import com.arangodb.DocumentCursor;
+import com.arangodb.entity.DocumentEntity;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import persistence.dao.generic.GenericDAOImpl;
@@ -10,6 +13,9 @@ import play.Logger;
 import play.libs.Json;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 /**
  * Created by Leonard Daume on 22.11.2015.
@@ -30,6 +36,29 @@ public class PasswordDao extends GenericDAOImpl<Password> implements IPasswordDA
         throw new RuntimeException(e);
       }
     });
+  }
+
+  public List<Password> delete(final Password password) throws ArangoException {
+    final StringBuilder queryBuilder = new StringBuilder("FOR p in " + ArangoDB.PASSWORDS_COLLECTION + " FILTER ");
+    final JsonNode asJson = Json.toJson(password);
+    final Map<String, Object> bindVars = Json.mapper().convertValue(asJson, Map.class);
+    final AtomicBoolean firstFilter = new AtomicBoolean(true);
+    bindVars.keySet().forEach(key -> {
+      if ( firstFilter.getAndSet(false) ) {
+        queryBuilder.append(" p." + key + " == @" + key);
+      } else {
+        queryBuilder.append(" && p." + key + " == @" + key);
+      }
+    });
+    queryBuilder.append(" REMOVE p IN " + ArangoDB.PASSWORDS_COLLECTION + " LET removed = OLD RETURN removed");
+    final String query = queryBuilder.toString();
+    final DocumentCursor<Password> passwordsToDelete = arangoDB.getArangoDriver()
+                                                               .executeDocumentQuery(query,
+                                                                                     bindVars,
+                                                                                     arangoDB.getArangoDriver()
+                                                                                             .getDefaultAqlQueryOptions(),
+                                                                                     Password.class);
+    return passwordsToDelete.asList().stream().map(DocumentEntity::getEntity).collect(Collectors.toList());
   }
 
   @Override public ArangoDB getArangoDB() {

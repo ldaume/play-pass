@@ -17,8 +17,10 @@ GET         /play-pass/password                 @controllers.Passwords.index()
 GET         /play-pass/password/data/pws        @controllers.Passwords.data()
 GET         /play-pass/password/upload          @controllers.Upload.index()
 POST        /play-pass/password/doUpload        @controllers.Upload.doUpload()
-GET         /play-pass/password/add             @controllers.AddPassword.index()
-POST        /play-pass/password/doAdd           @controllers.AddPassword.add()
+GET         /play-pass/password/add             @controllers.Passwords.addPasswordForm()
+POST        /play-pass/password/doAdd           @controllers.Passwords.add()
+POST        /play-pass/password/edit            @controllers.Passwords.edit()
+POST        /play-pass/password/delete         @controllers.Passwords.delete()
 
 
 # Map static resources from the /public folder to the /assets URL path

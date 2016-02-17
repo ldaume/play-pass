@@ -100,4 +100,6 @@ public abstract class GenericDAOImpl<T> implements GenericDAO<T> {
                          + " RETURN { doc: NEW, type: OLD ? 'update' : 'insert' }";
     return executeAqlQuery(query);
   }
+
+
 }
