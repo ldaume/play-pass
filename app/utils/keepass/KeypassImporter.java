@@ -1,20 +1,15 @@
 package utils.keepass;
 
-import com.fasterxml.jackson.databind.MappingIterator;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.google.common.collect.Lists;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.google.common.collect.Maps;
+import com.univocity.parsers.common.processor.RowListProcessor;
+import com.univocity.parsers.csv.CsvParser;
+import com.univocity.parsers.csv.CsvParserSettings;
 import persistence.entity.Password;
-import play.Logger;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
-
-import static org.apache.commons.lang3.StringUtils.trimToEmpty;
 
 /**
  * Created by Leonard Daume on 22.11.2015.
@@ -22,33 +17,42 @@ import static org.apache.commons.lang3.StringUtils.trimToEmpty;
 public class KeypassImporter {
 
   public static List<Password> fromKeepassCSV(final File csvFile) {
-    final List<Password> passwords = Lists.newArrayList();
-    try {
-      ObjectMapper mapper = new CsvMapper();
-      final String csvString = FileUtils.readFileToString(csvFile);
-      final MappingIterator<Map<String, String>> passWordIterator = mapper.readerFor(Map.class)
-                                                                          .with(CsvSchema.emptySchema()
-                                                                                         .withHeader()
-                                                                                         .withEscapeChar('\\'))
-                                                                          .readValues(csvString);
-      passWordIterator.forEachRemaining(passwordMap -> {
-        passwords.add(new Password(trimToEmpty(passwordMap.get("Account")),
-                                   trimToEmpty(passwordMap.get("Login Name")),
-                                   trimToEmpty(passwordMap.get("Password")),
-                                   trimToEmpty(passwordMap.get("Web Site")),
-                                   trimToEmpty(passwordMap.get("Comments"))));
+    final List<Password> parsedPasswords = Lists.newArrayList();
+
+    // read csv
+    final CsvParserSettings parserSettings = new CsvParserSettings();
+    parserSettings.getFormat().setLineSeparator("\n");
+    parserSettings.setNullValue("");
+    parserSettings.setHeaderExtractionEnabled(true);
+    final RowListProcessor rowProcessor = new RowListProcessor();
+    parserSettings.setRowProcessor(rowProcessor);
+    final CsvParser csvParser = new CsvParser(parserSettings);
+    csvParser.parse(csvFile);
+    final List<String> headers = Lists.newArrayList(rowProcessor.getHeaders());
+    final List<String[]> rows = rowProcessor.getRows();
+
+    // change structure
+    final List<Map<String, String>> passwordRows = Lists.newArrayList();
+    rows.forEach(row -> {
+      final List<String> entries = Lists.newArrayList(row);
+      final Map<String, String> rowEntry = Maps.newConcurrentMap();
+      entries.parallelStream().forEach(entry -> {
+        rowEntry.put(headers.get(entries.indexOf(entry)), entry);
       });
-    } catch (Exception e) {
-      Logger.error("Could not map keepass csv");
-      throw new RuntimeException(e);
-    }
-    return passwords;
+      passwordRows.add(rowEntry);
+    });
+
+    // map csv rows to object
+    passwordRows.forEach(password -> parsedPasswords.add(passwordFromMap(password)));
+
+    return parsedPasswords;
   }
 
-  private static String stripQuotes(final List<String> entries, final int index) {
-    String s = entries.get(index);
-    s = StringUtils.removeStart(s, "\"");
-    s = StringUtils.removeEnd(s, "\"");
-    return s;
+  private static Password passwordFromMap(final Map<String, String> passwordMap) {
+    return new Password(passwordMap.get("Account"),
+                        passwordMap.get("Login Name"),
+                        passwordMap.get("Password"),
+                        passwordMap.get("Web Site"),
+                        passwordMap.get("Comments"));
   }
 }
