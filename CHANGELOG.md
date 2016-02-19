@@ -1,11 +1,13 @@
 v1.1.0 (2016-0X-XX)
 -------------------
-
 * add or edit passwords with a helping password generator.
+
+v1.0.1 (2016-02-19) ✓
+-------------------
+* Import/Upload bug fixed ✓
 
 v1.0.0 (2016-02-18) ✓
 -------------------
-
 * Add/Edit/Delete passwords. ✓
  
 * Export options include copy to clipboard, CSV, Excel (XSLX) and PDF files ✓
@@ -18,5 +20,4 @@ v1.0.0 (2016-02-18) ✓
 
 v0.0.1-SNAPSHOT (2016-02-09) ✓
 ------------------------
-
 * First runnable release of Play-Pass ✓
