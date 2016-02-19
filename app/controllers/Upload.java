@@ -3,6 +3,7 @@ package controllers;
 import be.objectify.deadbolt.java.actions.SubjectPresent;
 import com.google.inject.Inject;
 import exceptions.TypeMismatch;
+import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.libs.F;
@@ -39,6 +40,7 @@ public class Upload extends Controller {
         uploadForm.reject(typeMismatch.getMessage());
         return badRequest(upload.render(uploadForm));
       } catch (Exception e) {
+        Logger.error("Could not import csv.", e);
         uploadForm.reject("Could not import csv.");
         return badRequest(upload.render(uploadForm));
       }

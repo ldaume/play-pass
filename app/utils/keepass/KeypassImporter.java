@@ -11,6 +11,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import static org.apache.commons.lang3.StringUtils.defaultString;
+
 /**
  * Created by Leonard Daume on 22.11.2015.
  */
@@ -33,12 +35,13 @@ public class KeypassImporter {
 
     // change structure
     final List<Map<String, String>> passwordRows = Lists.newArrayList();
-    rows.forEach(row -> {
-      final List<String> entries = Lists.newArrayList(row);
+    rows.stream().forEach(row -> {
+      int i = 0;
       final Map<String, String> rowEntry = Maps.newConcurrentMap();
-      entries.parallelStream().forEach(entry -> {
-        rowEntry.put(headers.get(entries.indexOf(entry)), entry);
-      });
+      for ( String entry : row ) {
+        rowEntry.put(headers.get(i), defaultString(entry));
+        i++;
+      }
       passwordRows.add(rowEntry);
     });
 
