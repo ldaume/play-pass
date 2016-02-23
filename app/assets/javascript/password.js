@@ -137,9 +137,19 @@ $(document).ready(function () {
         var oldPassword = chosenPassword;
         var newPassword = passwordFormToJSON();
         if (oldPassword.account !== newPassword.account || oldPassword.login !== newPassword.login || oldPassword.password !== newPassword.password || oldPassword.webSite !== newPassword.webSite || oldPassword.comments !== newPassword.comments) {
-            // TODO do change
+            $.postJSON({
+                url: "/play-pass/password/edit",
+                data: {from: oldPassword, to: newPassword},
+                success: function (data) {
+                    $("#modalEditor").modal("hide");
+                    table.ajax.reload();
+                },
+                error: function () {
+                    $("#modalEditor #modalEditorError").text("Could not change the password.");
+                    showModalEditError();
+                }
+            });
             $("#modalEditor").modal("hide");
-            table.ajax.reload();
         } else {
             $("#modalEditor #modalEditorError").text("Nothing has changed.");
             showModalEditError();

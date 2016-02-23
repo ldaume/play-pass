@@ -100,6 +100,21 @@ public abstract class GenericDAOImpl<T> implements GenericDAO<T> {
                          + " RETURN { doc: NEW, type: OLD ? 'update' : 'insert' }";
     return executeAqlQuery(query);
   }
+  @Override
+  public String upsert(final Object objectToSearch, final Object objectToStore) throws ArangoException {
+    final String jsonToSearch = Json.toJson(objectToSearch).toString();
+    final String jsonToStore = Json.toJson(objectToStore).toString();
+    final String query = "UPSERT "
+                         + jsonToSearch
+                         + " INSERT "
+                         + jsonToStore
+                         + " UPDATE "
+                         + jsonToStore
+                         + " IN "
+                         + getCollectionName()
+                         + " RETURN { doc: NEW, type: OLD ? 'update' : 'insert' }";
+    return executeAqlQuery(query);
+  }
 
 
 }

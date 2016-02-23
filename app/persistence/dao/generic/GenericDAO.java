@@ -19,4 +19,6 @@ public interface GenericDAO<T> {
                 Object insertExpression) throws ArangoException;
 
   String upsert(Object objectToStore) throws ArangoException;
+
+  String upsert(Object objectToSearch, Object objectToStore) throws ArangoException;
 }

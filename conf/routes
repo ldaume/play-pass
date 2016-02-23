@@ -20,7 +20,6 @@ POST        /play-pass/password/doUpload        @controllers.Upload.doUpload()
 GET         /play-pass/password/add             @controllers.Passwords.addPasswordForm()
 POST        /play-pass/password/doAdd           @controllers.Passwords.add()
 POST        /play-pass/password/edit            @controllers.Passwords.edit()
-POST        /play-pass/password/delete         @controllers.Passwords.delete()
 
 
 # Map static resources from the /public folder to the /assets URL path

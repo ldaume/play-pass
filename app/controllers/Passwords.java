@@ -3,14 +3,9 @@ package controllers;
 import be.objectify.deadbolt.java.actions.SubjectPresent;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.gson.JsonObject;
 import com.google.inject.Inject;
-import io.mola.galimatias.GalimatiasParseException;
-import io.mola.galimatias.URL;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import persistence.entity.Password;
-import play.Logger;
 import play.data.Form;
 import play.libs.F;
 import play.libs.Json;
@@ -60,8 +55,11 @@ public class Passwords extends Controller {
 
   public F.Promise<Result> edit() {
     return F.Promise.promise(() -> {
-      Form<Password> passwordForm = Form.form(Password.class).bindFromRequest();
-      return ok(addPassword.render(passwordForm));
+      final JsonNode jsonNode = request().body().asJson();
+      final Password from = Json.mapper().treeToValue(jsonNode.get("from"), Password.class);
+      final Password to = Json.mapper().treeToValue(jsonNode.get("to"), Password.class);
+      final String change = passwordService.change(from, to);
+      return ok(Json.toJson(change));
     });
   }
 

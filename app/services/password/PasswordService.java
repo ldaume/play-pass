@@ -55,4 +55,8 @@ public class PasswordService {
   public List<Password> delete(final Password password) throws ArangoException {
     return passwordDao.delete(password);
   }
+
+  public String change(final Password from, final Password to) throws ArangoException {
+    return passwordDao.upsert(from,to);
+  }
 }
