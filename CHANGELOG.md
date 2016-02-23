@@ -1,4 +1,8 @@
-v1.1.0 (2016-0X-XX)
+v1.2.0 (2016-0X-XX)
+-------------------
+* User-Administration Area
+
+v1.1.0 (2016-02-23) ✓
 -------------------
 * add or edit passwords with a helping password generator from https://github.com/pluess/Password-Generator ✓
 * Edit passwords ✓
