@@ -1,7 +1,7 @@
 v1.1.0 (2016-0X-XX)
 -------------------
-* add or edit passwords with a helping password generator.
-* Edit passwords.
+* add or edit passwords with a helping password generator from https://github.com/pluess/Password-Generator ✓
+* Edit passwords ✓
 
 v1.0.1 (2016-02-19) ✓
 -------------------
