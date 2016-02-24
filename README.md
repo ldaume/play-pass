@@ -45,11 +45,10 @@ play-pass:
     - ARANGO_HOST=play-pass-arango
     - ARANGO_PORT=8529
     - ARANGO_USER=user
-    - ARANGO_PASSWORD=password
+    - ARANGO_PASSWORD=pw
     - AUTHORISED_USERS=[{email:'test@example.com',password:'test'}]
 #  Change the enrtrypoint to use SSL
 #  entrypoint: bin/play-pass -Dhttps.port=9443
-
 ```
 ## Linux & Windows Binary
 Play provides an executable binary for linux and windows.
