@@ -25,14 +25,14 @@ One could create the `docker-compose.yml` file and start the App with `docker-co
 ```yaml
 play-pass-arango:
   image: arangodb/arangodb:2.8.1
-  container_name: play-pass-arango
+  container_name: play-pass-arangodb
   environment:
     - ARANGODB_USERNAME=user
     - ARANGODB_PASSWORD=pw
-  volumes:
-    - /path/to/host/dir:/var/lib/arangodb
-  restart: always
- play-pass:
+#  volumes:
+#    - /path/to/host/dir:/var/lib/arangodb
+#  restart: always
+play-pass:
   image: ldaume/play-pass:latest
   container_name: play-pass
   links:
@@ -49,6 +49,7 @@ play-pass-arango:
     - AUTHORISED_USERS=[{email:'test@example.com',password:'test'}]
 #  Change the enrtrypoint to use SSL
 #  entrypoint: bin/play-pass -Dhttps.port=9443
+
 ```
 ## Linux & Windows Binary
 Play provides an executable binary for linux and windows.
