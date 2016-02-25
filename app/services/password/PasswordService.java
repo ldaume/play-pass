@@ -10,6 +10,7 @@ import com.google.inject.Inject;
 import exceptions.TypeMismatch;
 import persistence.dao.PasswordDao;
 import persistence.entity.Password;
+import play.Logger;
 import play.libs.Json;
 import play.mvc.Http;
 import utils.keepass.KeypassImporter;
@@ -29,7 +30,7 @@ public class PasswordService {
     return objectNode;
   }
 
-  public void insertOrUpdate(final Password password) throws com.arangodb.ArangoException {
+  public void insertOrUpdate(final Password password) throws ArangoException {
     passwordDao.upsert(password);
   }
 
@@ -48,15 +49,31 @@ public class PasswordService {
                              + "} was uploaded"
                              + ".");
     }
-    List<Password> passwords = KeypassImporter.fromKeepassCSV(csv.getFile());
-    passwordDao.saveOrUpdateAllCredentials(passwords);
+
+    try {
+      List<Password> passwords = KeypassImporter.fromKeepassCSV(csv.getFile());
+      passwordDao.saveOrUpdateAllCredentials(passwords);
+    } catch (Exception e) {
+      Logger.error("Could not import passwords.", e);
+      throw e;
+    }
   }
 
   public List<Password> delete(final Password password) throws ArangoException {
-    return passwordDao.delete(password);
+    try {
+      return passwordDao.delete(password);
+    } catch (Exception e) {
+      Logger.error("Could not delete password.", e);
+      throw e;
+    }
   }
 
   public String change(final Password from, final Password to) throws ArangoException {
-    return passwordDao.upsert(from,to);
+    try {
+      return passwordDao.upsert(from, to);
+    } catch (Exception e) {
+      Logger.error("Could not change password.", e);
+      throw e;
+    }
   }
 }

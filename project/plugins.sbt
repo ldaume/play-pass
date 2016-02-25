@@ -1,8 +1,12 @@
 logLevel := Level.Warn
 
 resolvers += "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/"
+resolvers += "Typesafe Snapshots" at "http://repo.typesafe.com/typesafe/snapshots/"
+resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
+resolvers += Resolver.jcenterRepo
+resolvers += Resolver.mavenLocal
 
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.4.6")
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.4.6" exclude("com.typesafe.sbt", "sbt-native-packager"))
 
 // Web plugins
 addSbtPlugin("com.typesafe.sbt" % "sbt-coffeescript" % "1.0.0")
@@ -14,6 +18,9 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-mocha" % "1.1.0")
 
 // tools
 addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.8.2")
+
+// for autoplugins
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.1.0-RC2")
 
 // Play enhancer - this automatically generates getters/setters for public fields
 // and rewrites accessors of these fields to use the getters/setters. Remove this
