@@ -2,7 +2,7 @@ v1.2.0 (2016-0X-XX)
 -------------------
 * User-Administration Area
 
-v1.1.1 (2016-03-08)
+v1.1.1 (2016-03-08)✓
 -------------------
 * render html encoded passwords 
 
