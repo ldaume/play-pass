@@ -1,7 +1,6 @@
 /**
  * Created by leonard on 10.02.16.
  */
-
 var chosenPassword = null;
 
 function fillEditForm(d) {
@@ -74,7 +73,9 @@ $(document).ready(function () {
         "columns": [
             {"data": "account"},
             {"data": "login"},
-            {"data": "password"},
+            {"data": "password", "render": function (data, type, full, meta) {
+                return htmlEncode(data);
+            }},
             {
                 "data": "webSite", "render": function (data, type, full, meta) {
                 if ($.isBlank(data) || /\s/.test(data)) {

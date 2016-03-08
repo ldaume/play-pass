@@ -2,7 +2,7 @@ import com.typesafe.sbt.packager.docker._
 
 name := """play-pass"""
 
-version := "1.2.0-SNAPSHOT"
+version := "1.1.1"
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava, JavaAppPackaging, DockerPlugin)
 
