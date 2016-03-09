@@ -15,27 +15,28 @@
  */
 package security;
 
-import be.objectify.deadbolt.core.models.Subject;
 import be.objectify.deadbolt.java.AbstractDeadboltHandler;
+import be.objectify.deadbolt.java.models.Subject;
 import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 import play.cache.CacheApi;
-import play.libs.F;
 import play.mvc.Http;
 import play.mvc.Result;
 
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 public class DeadboltHandler extends AbstractDeadboltHandler {
 
   @Inject private CacheApi cacheApi;
 
-  public F.Promise<Optional<Result>> beforeAuthCheck(final Http.Context context) {
-    return F.Promise.promise(Optional::empty);
+  public CompletionStage<Optional<Result>> beforeAuthCheck(final Http.Context context) {
+    return CompletableFuture.supplyAsync(Optional::empty);
   }
 
-  public F.Promise<Optional<Subject>> getSubject(final Http.Context context) {
-    return F.Promise.promise(() -> {
+  public CompletionStage<Optional<? extends Subject>> getSubject(final Http.Context context) {
+    return CompletableFuture.supplyAsync(() -> {
       final Http.Session session = context.session();
       final String id = session.get("id");
       if ( StringUtils.isBlank(id) ) {
@@ -49,7 +50,7 @@ public class DeadboltHandler extends AbstractDeadboltHandler {
     });
   }
 
-  @Override public F.Promise<Result> onAuthFailure(final Http.Context context, final String content) {
-    return F.Promise.promise(() -> redirect("/play-pass/login"));
+  @Override public CompletionStage<Result> onAuthFailure(final Http.Context context, final String content) {
+    return CompletableFuture.supplyAsync(() -> redirect("/play-pass/login"));
   }
 }

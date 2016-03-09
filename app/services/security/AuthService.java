@@ -1,6 +1,6 @@
 package services.security;
 
-import be.objectify.deadbolt.core.models.Subject;
+import be.objectify.deadbolt.java.models.Subject;
 import com.arangodb.ArangoException;
 import com.google.inject.Inject;
 import de.qaware.heimdall.Password;
@@ -9,7 +9,7 @@ import de.qaware.heimdall.PasswordFactory;
 import exceptions.AuthException;
 import persistence.dao.UserDao;
 import persistence.entity.AuthorisedUser;
-import play.Play;
+import play.Configuration;
 import play.cache.CacheApi;
 
 import java.time.Duration;
@@ -24,6 +24,10 @@ public class AuthService {
   @Inject private UserDao userDao;
 
   @Inject private CacheApi cacheApi;
+
+
+  @Inject
+  private Configuration configuration;
 
   public UUID authorise(final AuthorisedUser user) throws AuthException, ArangoException, PasswordException {
     final Optional<Subject> byEmail = userDao.findByEmail(user.getEmail());
@@ -41,7 +45,7 @@ public class AuthService {
         final UUID uuid = UUID.randomUUID();
         cacheApi.set(uuid.toString(),
                      authorisedUser,
-                     Long.valueOf(Duration.ofMinutes(Play.application().configuration().getInt("session.timeout"))
+                     Long.valueOf(Duration.ofMinutes(configuration.getInt("session.timeout"))
                                           .getSeconds()).intValue());
         return uuid;
       } else {

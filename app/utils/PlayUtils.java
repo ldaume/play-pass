@@ -1,9 +1,10 @@
 package utils;
 
+import com.google.inject.Inject;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import org.apache.commons.lang3.StringUtils;
-import play.Play;
+import play.Application;
 import play.libs.Json;
 
 import java.io.IOException;
@@ -17,14 +18,17 @@ import static play.Logger.info;
  */
 public final class PlayUtils {
 
-  public static final void logConfig() {
+  @Inject
+  private Application application;
+
+  public final void logConfig() {
     printEnvs();
     sleepQuietly();
     printUsedConfig();
     sleepQuietly();
   }
 
-  private static void sleepQuietly() {
+  private void sleepQuietly() {
     try {
       Thread.sleep(1000);
     } catch (InterruptedException e) {
@@ -32,7 +36,7 @@ public final class PlayUtils {
     }
   }
 
-  private static void printEnvs() {
+  private void printEnvs() {
     final StringBuilder configPrinter = startConfigPrinter("Environment variables");
     System.getenv()
           .keySet()
@@ -42,16 +46,16 @@ public final class PlayUtils {
     info(withFooter(configPrinter).toString());
   }
 
-  private static void printUsedConfig() {
+  private void printUsedConfig() {
     String config = System.getProperty("config.resource", "application.conf");
     final StringBuilder configPrinter = startConfigPrinter("Config file: (" + config + ")");
     Properties loadedConfigFile = new Properties();
     try {
-      loadedConfigFile.load(Play.application().classloader().getResourceAsStream(config));
+      loadedConfigFile.load(application.classloader().getResourceAsStream(config));
     } catch (IOException e) {
       //
     }
-    DocumentContext ctx = JsonPath.parse(Json.toJson(Play.application().configuration().asMap())
+    DocumentContext ctx = JsonPath.parse(Json.toJson(application.configuration().asMap())
                                              .toString());
     loadedConfigFile.keySet().stream().sorted().forEach(key -> {
       try {
@@ -63,7 +67,7 @@ public final class PlayUtils {
     info(withFooter(configPrinter).toString());
   }
 
-  private static final StringBuilder startConfigPrinter(final String title) {
+  private final StringBuilder startConfigPrinter(final String title) {
     final StringBuilder text = new StringBuilder("\n\t╭" + repeat("─", 68) + "╮\n");
     text.append(StringUtils.rightPad("\t│    " + title + ": ", 70, " ") + "│\n");
     text.append("\t╞════" + repeat("═", 60) + "════╡\n");
@@ -71,13 +75,13 @@ public final class PlayUtils {
     return text;
   }
 
-  private static void addKeyValue(final StringBuilder configPrinter,
+  private void addKeyValue(final StringBuilder configPrinter,
                                   final Object key,
                                   final Object value) {
     configPrinter.append("\t│    " + key + " = " + value + "\n");
   }
 
-  private static StringBuilder withFooter(final StringBuilder text) {
+  private StringBuilder withFooter(final StringBuilder text) {
     text.append("\t│" + repeat(" ", 68) + "┊\n");
     text.append("\t╰" + repeat("─", 68) + "╯\n");
     return text;

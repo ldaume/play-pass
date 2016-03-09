@@ -1,6 +1,6 @@
 package persistence.dao;
 
-import be.objectify.deadbolt.core.models.Subject;
+import be.objectify.deadbolt.java.models.Subject;
 import com.arangodb.ArangoException;
 import com.arangodb.DocumentCursor;
 import com.arangodb.entity.DocumentEntity;

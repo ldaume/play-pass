@@ -26,7 +26,7 @@ libraryDependencies ++= Seq(
   "org.webjars" % "font-awesome" % "4.5.0",
 
   // Security
-  "be.objectify" %% "deadbolt-java" % "2.4.4",
+  "be.objectify" %% "deadbolt-java" % "2.5.0-SNAPSHOT",
   "de.qaware" % "heimdall" % "1.3",
 
   // Commons
@@ -82,7 +82,7 @@ maintainer := "Leonard Daume"
 dockerExposedPorts in Docker := Seq(9000, 9443)
 
 // publish to repo
-dockerRepository := Some("ldaume")
-dockerUpdateLatest := true
+dockerRepository := Some("registry.ng.bluemix.net/ldaume")
+dockerUpdateLatest := false
 
 // run this with: docker run -p 9000:9000 <name>:<version>

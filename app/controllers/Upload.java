@@ -5,12 +5,15 @@ import com.google.inject.Inject;
 import exceptions.TypeMismatch;
 import play.Logger;
 import play.data.DynamicForm;
-import play.data.Form;
-import play.libs.F;
+import play.data.FormFactory;
 import play.mvc.Controller;
 import play.mvc.Result;
 import services.password.PasswordService;
 import views.html.content.upload;
+
+import java.io.File;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 /**
  * Created by Leonard Daume on 23.11.2015.
@@ -18,22 +21,21 @@ import views.html.content.upload;
 @SubjectPresent
 public class Upload extends Controller {
   @Inject private PasswordService passwordService;
+  @Inject private FormFactory formFactory;
 
-  public F.Promise<Result> index() {
-    return F.Promise.promise(() -> ok(upload.render(Form.form().bindFromRequest())));
+  public CompletionStage<Result> index() {
+    return CompletableFuture.supplyAsync(() -> ok(upload.render(formFactory.form().bindFromRequest())));
   }
 
-  public F.Promise<Result> doUpload() {
-    return F.Promise.promise(() -> {
-      DynamicForm uploadForm = Form.form().bindFromRequest();
-      play.mvc.Http.MultipartFormData body = request().body().asMultipartFormData();
-      play.mvc.Http.MultipartFormData.FilePart csv = body.getFile("csv");
-
+  public CompletionStage<Result> doUpload() {
+    final DynamicForm uploadForm = formFactory.form().bindFromRequest();
+    final play.mvc.Http.MultipartFormData<File> body = request().body().asMultipartFormData();
+    return CompletableFuture.supplyAsync(() -> {
+      play.mvc.Http.MultipartFormData.FilePart<File> csv = body.getFile("csv");
       if ( csv == null ) {
         uploadForm.reject("Missing file");
         return badRequest(upload.render(uploadForm));
       }
-
       try {
         passwordService.importCsv(csv);
       } catch (TypeMismatch typeMismatch) {

@@ -1,16 +1,17 @@
 package controllers;
 
 import be.objectify.deadbolt.java.actions.SubjectPresent;
-import play.libs.F;
 import play.mvc.Controller;
 import play.mvc.Result;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 @SubjectPresent
 public class Application extends Controller {
 
-  public F.Promise<Result> index() throws IOException {
-    return F.Promise.promise(() -> redirect(routes.Passwords.index()));
+  public CompletionStage<Result> index() throws IOException {
+    return CompletableFuture.supplyAsync(() -> redirect(routes.Passwords.index()));
   }
 }

@@ -1,6 +1,6 @@
 package persistence.dao;
 
-import be.objectify.deadbolt.core.models.Subject;
+import be.objectify.deadbolt.java.models.Subject;
 
 import java.util.Optional;
 

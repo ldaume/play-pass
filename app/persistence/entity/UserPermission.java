@@ -15,7 +15,7 @@
  */
 package persistence.entity;
 
-import be.objectify.deadbolt.core.models.Permission;
+import be.objectify.deadbolt.java.models.Permission;
 
 /**
  * @author Leonard Daume

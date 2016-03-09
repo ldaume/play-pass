@@ -12,9 +12,10 @@ import persistence.dao.PasswordDao;
 import persistence.entity.Password;
 import play.Logger;
 import play.libs.Json;
-import play.mvc.Http;
+import play.mvc.Http.MultipartFormData.FilePart;
 import utils.keepass.KeypassImporter;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public class PasswordService {
   public JsonNode allPasswords() {
     final ObjectNode objectNode = Json.newObject();
     final List<Password> allPasswords = passwordDao.getAll();
-    objectNode.put("data", Json.toJson(allPasswords));
+    objectNode.set("data", Json.toJson(allPasswords));
     return objectNode;
   }
 
@@ -34,7 +35,7 @@ public class PasswordService {
     passwordDao.upsert(password);
   }
 
-  public void importCsv(final Http.MultipartFormData.FilePart csv) throws TypeMismatch {
+  public void importCsv(final FilePart csv) throws TypeMismatch {
     final String contentType = csv.getContentType();
     final MediaType mediaType = MediaType.parse(contentType);
     final List<MediaType> allowedTypes = Lists.newArrayList(MediaType.CSV_UTF_8,
@@ -51,8 +52,7 @@ public class PasswordService {
     }
 
     try {
-      List<Password> passwords = KeypassImporter.fromKeepassCSV(csv.getFile());
-      passwordDao.saveOrUpdateAllCredentials(passwords);
+      List<Password> passwords = KeypassImporter.fromKeepassCSV((File) csv.getFile());
     } catch (Exception e) {
       Logger.error("Could not import passwords.", e);
       throw e;

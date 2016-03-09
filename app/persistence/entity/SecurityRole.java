@@ -15,7 +15,7 @@
  */
 package persistence.entity;
 
-import be.objectify.deadbolt.core.models.Role;
+import be.objectify.deadbolt.java.models.Role;
 
 /**
  * @author Leonard Daume

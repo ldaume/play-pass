@@ -12,14 +12,13 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import de.qaware.heimdall.Password;
 import de.qaware.heimdall.PasswordException;
 import de.qaware.heimdall.PasswordFactory;
 import org.apache.commons.lang3.StringUtils;
 import persistence.entity.AuthorisedUser;
+import play.Configuration;
 import play.Logger;
-import play.Play;
 import play.libs.Json;
 
 import java.io.IOException;
@@ -35,7 +34,6 @@ import java.util.Optional;
  * <p>
  * Created by Leonard Daume on 16.10.2015.
  */
-@Singleton
 public class ArangoDB {
 
   public static final String PASSWORDS_COLLECTION = "Passwords";
@@ -43,8 +41,10 @@ public class ArangoDB {
   private static final String PASSWORDS_DB = "ReinventPasswords";
 
   private ArangoDriver arangoDriver;
+  private Configuration configuration;
 
-  @Inject public ArangoDB() {
+  @Inject public ArangoDB(Configuration configuration) {
+    this.configuration = configuration;
     initDb(null, null, null, null, null, false);
   }
 
@@ -66,12 +66,12 @@ public class ArangoDB {
                       final boolean truncateCollections) {
     // Initialize configure
     ArangoConfigure configure = new ArangoConfigure();
-    String host = Play.application().configuration().getString("arango.host", "localhost");
-    Integer port = Play.application().configuration().getInt("arango.port", 8529);
+    String host = configuration.getString("arango.host", "localhost");
+    Integer port = configuration.getInt("arango.port", 8529);
     configure.setArangoHost(new ArangoHost(Optional.ofNullable(hostIp).orElse(host), port));
-    String arangoUsername = Play.application().configuration().getString("arango.username", "root");
+    String arangoUsername = configuration.getString("arango.username", "root");
     configure.setUser(Optional.ofNullable(username).orElse(arangoUsername));
-    String arangoPassword = Play.application().configuration().getString("arango.password", "pw");
+    String arangoPassword = configuration.getString("arango.password", "pw");
     Logger.info("Will connect to arango as user ({}) with pw ({}) @ {}:{} ...",
                 arangoUsername,
                 arangoPassword,
@@ -131,7 +131,7 @@ public class ArangoDB {
         arangoDriver.truncateCollection(collection);
       }
       if ( isAuthorisedUserCollection ) {
-        final String jsonString = Play.application().configuration().getString("authorised.users");
+        final String jsonString = configuration.getString("authorised.users");
         if ( StringUtils.isNotBlank(jsonString) ) {
           try {
             final List<AuthorisedUser> allDefaultUsers = Json.mapper()
