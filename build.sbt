@@ -36,8 +36,9 @@ libraryDependencies ++= Seq(
   "commons-io" % "commons-io" % "2.4",
 
 
-  // ARANGO
+  // DB
   "com.arangodb" % "arangodb-java-driver" % "2.7.2",
+  "org.jetbrains.xodus" % "xodus-environment" % "1.0-SNAPSHOT",
 
   // Json
   "com.jayway.jsonpath" % "json-path" % "2.1.0",

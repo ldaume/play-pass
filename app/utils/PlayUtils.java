@@ -18,8 +18,12 @@ import static play.Logger.info;
  */
 public final class PlayUtils {
 
-  @Inject
-  private Application application;
+  private final Application application;
+
+  @Inject public PlayUtils(Application application) {
+    this.application = application;
+    logConfig();
+  }
 
   public final void logConfig() {
     printEnvs();
@@ -38,11 +42,7 @@ public final class PlayUtils {
 
   private void printEnvs() {
     final StringBuilder configPrinter = startConfigPrinter("Environment variables");
-    System.getenv()
-          .keySet()
-          .stream()
-          .sorted()
-          .forEach(key -> addKeyValue(configPrinter, key, System.getenv(key)));
+    System.getenv().keySet().stream().sorted().forEach(key -> addKeyValue(configPrinter, key, System.getenv(key)));
     info(withFooter(configPrinter).toString());
   }
 
@@ -55,8 +55,7 @@ public final class PlayUtils {
     } catch (IOException e) {
       //
     }
-    DocumentContext ctx = JsonPath.parse(Json.toJson(application.configuration().asMap())
-                                             .toString());
+    DocumentContext ctx = JsonPath.parse(Json.toJson(application.configuration().asMap()).toString());
     loadedConfigFile.keySet().stream().sorted().forEach(key -> {
       try {
         addKeyValue(configPrinter, key, ctx.read("$." + key));
@@ -75,9 +74,7 @@ public final class PlayUtils {
     return text;
   }
 
-  private void addKeyValue(final StringBuilder configPrinter,
-                                  final Object key,
-                                  final Object value) {
+  private void addKeyValue(final StringBuilder configPrinter, final Object key, final Object value) {
     configPrinter.append("\t│    " + key + " = " + value + "\n");
   }
 

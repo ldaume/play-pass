@@ -25,4 +25,4 @@ POST        /play-pass/password/delete          @controllers.Passwords.delete()
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /play-pass/assets/*file             @controllers.Assets.at(path="/public", file)
-GET         /play-pass/webjars/*file            @controllers.WebJarAssets.at(file)
+#GET         /play-pass/webjars/*file            @controllers.WebJarAssets.at(file)
