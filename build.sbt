@@ -83,7 +83,12 @@ maintainer := "Leonard Daume"
 dockerExposedPorts in Docker := Seq(9000, 9443)
 
 // publish to repo
+<<<<<<< Updated upstream
 dockerRepository := Some("registry.ng.bluemix.net/ldaume")
 dockerUpdateLatest := false
+=======
+dockerRepository := Some("quay.io/ldaume")
+dockerUpdateLatest := true
+>>>>>>> Stashed changes
 
 // run this with: docker run -p 9000:9000 <name>:<version>
