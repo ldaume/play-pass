@@ -16,6 +16,7 @@
 package security;
 
 import be.objectify.deadbolt.java.AbstractDeadboltHandler;
+import be.objectify.deadbolt.java.ExecutionContextProvider;
 import be.objectify.deadbolt.java.models.Subject;
 import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +31,10 @@ import java.util.concurrent.CompletionStage;
 public class DeadboltHandler extends AbstractDeadboltHandler {
 
   @Inject private CacheApi cacheApi;
+
+  @Inject public DeadboltHandler(final ExecutionContextProvider ecProvider) {
+    super(ecProvider);
+  }
 
   public CompletionStage<Optional<Result>> beforeAuthCheck(final Http.Context context) {
     return CompletableFuture.supplyAsync(Optional::empty);

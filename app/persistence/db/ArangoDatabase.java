@@ -6,9 +6,7 @@ import com.arangodb.ArangoException;
 import com.arangodb.ArangoHost;
 import com.arangodb.entity.CollectionEntity;
 import com.arangodb.entity.UserEntity;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
@@ -30,26 +28,24 @@ import java.util.Optional;
 
 
 /**
- * The connection to a ArangoDB.
+ * The connection to a ArangoDatabase.
  * <p>
  * Created by Leonard Daume on 16.10.2015.
  */
-public class ArangoDB {
+public class ArangoDatabase implements Database {
 
-  public static final String PASSWORDS_COLLECTION = "Passwords";
-  public static final String AUTHORIZED_USERS_COLLECTION = "AuthorisedUsers";
   private static final String PASSWORDS_DB = "ReinventPasswords";
 
   private ArangoDriver arangoDriver;
   private Configuration configuration;
 
-  @Inject public ArangoDB(Configuration configuration) {
+  @Inject public ArangoDatabase(Configuration configuration) {
     this.configuration = configuration;
     initDb(null, null, null, null, null, false);
   }
 
   /**
-   * DB bootstrapping.
+   * Database bootstrapping.
    *
    * @param hostIp
    * @param username
@@ -131,17 +127,10 @@ public class ArangoDB {
         arangoDriver.truncateCollection(collection);
       }
       if ( isAuthorisedUserCollection ) {
-        final String jsonString = configuration.getString("authorised.users");
+        final String jsonString = getAuthorisedUsersJson();
         if ( StringUtils.isNotBlank(jsonString) ) {
           try {
-            final List<AuthorisedUser> allDefaultUsers = Json.mapper()
-                                                             .configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true)
-                                                             .configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES,
-                                                                        true)
-                                                             .readValue(jsonString,
-                                                                        TypeFactory.defaultInstance()
-                                                                                   .constructCollectionType(List.class,
-                                                                                                            AuthorisedUser.class));
+            final List<AuthorisedUser> allDefaultUsers = getAuthorisedUsers();
             allDefaultUsers.forEach(authorisedUser -> {
               try {
                 final Password password = PasswordFactory.create();
@@ -178,12 +167,16 @@ public class ArangoDB {
     return arangoDriver;
   }
 
-  public ArangoDB(final String hostIp,
-                  final String username,
-                  final String password,
-                  final String db,
-                  final List<String> collections,
-                  final boolean truncateCollections) {
+  public ArangoDatabase(final String hostIp,
+                        final String username,
+                        final String password,
+                        final String db,
+                        final List<String> collections,
+                        final boolean truncateCollections) {
     initDb(hostIp, username, password, db, collections, truncateCollections);
+  }
+
+  @Override public Configuration getConfiguration() {
+    return configuration;
   }
 }

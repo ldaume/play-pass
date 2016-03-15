@@ -1,4 +1,4 @@
-package persistence.dao.generic;
+package persistence.dao.generic.arango;
 
 import com.arangodb.ArangoException;
 import com.arangodb.DocumentCursor;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 /**
  * Created by Leonard Daume on 04.02.2016.
  */
-public abstract class GenericDAOImpl<T> implements GenericDAO<T> {
+public abstract class GenericArangoDao<T> implements GenericArangoDB<T> {
 
   /**
    * Gets all available Documents from a collection and maps them to T.
@@ -41,12 +41,16 @@ public abstract class GenericDAOImpl<T> implements GenericDAO<T> {
    */
   protected abstract String getCollectionName();
 
+  /**
+   * The class of the entity to map.
+   *
+   * @return class
+   */
   protected abstract Class<?> getGenericType();
 
   /**
    * Executes an upsert query and returns the raw JSON response. <p> Can be used for checking whether certain documents
-   * exist, and to update them in case they exist, or create them in case they do not exist. On a single server,
-   * upserts
+   * exist, and to update them in case they exist, or create them in case they do not exist. On a single server, upserts
    * are executed transactionally in an all-or-nothing fashion. For sharded collections, the entire update operation is
    * not transactional. </p>
    *
@@ -100,8 +104,8 @@ public abstract class GenericDAOImpl<T> implements GenericDAO<T> {
                          + " RETURN { doc: NEW, type: OLD ? 'update' : 'insert' }";
     return executeAqlQuery(query);
   }
-  @Override
-  public String upsert(final Object objectToSearch, final Object objectToStore) throws ArangoException {
+
+  @Override public String upsert(final Object objectToSearch, final Object objectToStore) throws ArangoException {
     final String jsonToSearch = Json.toJson(objectToSearch).toString();
     final String jsonToStore = Json.toJson(objectToStore).toString();
     final String query = "UPSERT "
@@ -115,6 +119,4 @@ public abstract class GenericDAOImpl<T> implements GenericDAO<T> {
                          + " RETURN { doc: NEW, type: OLD ? 'update' : 'insert' }";
     return executeAqlQuery(query);
   }
-
-
 }
