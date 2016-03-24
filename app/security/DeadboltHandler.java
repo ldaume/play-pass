@@ -30,32 +30,35 @@ import java.util.concurrent.CompletionStage;
 
 public class DeadboltHandler extends AbstractDeadboltHandler {
 
-  @Inject private CacheApi cacheApi;
+    @Inject
+    private CacheApi cacheApi;
 
-  @Inject public DeadboltHandler(final ExecutionContextProvider ecProvider) {
-    super(ecProvider);
-  }
+    @Inject
+    public DeadboltHandler(final ExecutionContextProvider ecProvider) {
+        super(ecProvider);
+    }
 
-  public CompletionStage<Optional<Result>> beforeAuthCheck(final Http.Context context) {
-    return CompletableFuture.supplyAsync(Optional::empty);
-  }
+    public CompletionStage<Optional<Result>> beforeAuthCheck(final Http.Context context) {
+        return CompletableFuture.supplyAsync(Optional::empty);
+    }
 
-  public CompletionStage<Optional<? extends Subject>> getSubject(final Http.Context context) {
-    return CompletableFuture.supplyAsync(() -> {
-      final Http.Session session = context.session();
-      final String id = session.get("id");
-      if ( StringUtils.isBlank(id) ) {
-        return Optional.empty();
-      }
-      final Optional<Subject> subject = Optional.ofNullable(cacheApi.get(id));
-      if ( !subject.isPresent() ) {
-        session.clear();
-      }
-      return subject;
-    });
-  }
+    public CompletionStage<Optional<? extends Subject>> getSubject(final Http.Context context) {
+        return CompletableFuture.supplyAsync(() -> {
+            final Http.Session session = context.session();
+            final String id = session.get("id");
+            if (StringUtils.isBlank(id)) {
+                return Optional.empty();
+            }
+            final Optional<Subject> subject = Optional.ofNullable(cacheApi.get(id));
+            if (!subject.isPresent()) {
+                session.clear();
+            }
+            return subject;
+        });
+    }
 
-  @Override public CompletionStage<Result> onAuthFailure(final Http.Context context, final String content) {
-    return CompletableFuture.supplyAsync(() -> redirect("/play-pass/login"));
-  }
+    @Override
+    public CompletionStage<Result> onAuthFailure(final Http.Context context, final Optional<String> content) {
+        return CompletableFuture.supplyAsync(() -> redirect("/play-pass/login"));
+    }
 }
